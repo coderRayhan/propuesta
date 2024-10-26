@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To Tamanna</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body */
+    body {
+      font-family: "Arial", sans-serif;
+      background: #f8f8f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Container */
+    .container {
+      text-align: center;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      z-index: 1;
+      position: relative;
+    }
+
+    /* Rose Zoom Animation */
+    .rose-zoom {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 100px;
+      height: 100px;
+      background: url('https://pngimg.com/uploads/rose/rose_PNG66709.png') no-repeat center/contain;
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+      z-index: 999; /* Ensure it is above everything */
+      transition: transform 2s ease, opacity 1.5s ease;
+    }
+
+    .rose-zoom.active {
+      transform: translate(-50%, -50%) scale(15);
+      opacity: 1;
+    }
+
+    /* Heart Animation */
+    .heart-container {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 20px;
+    }
+
+    .heart {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: red;
+      border-radius: 50%;
+      transform: rotate(-45deg);
+      animation: beat 1s infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -50px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: 50px;
+      top: 0;
+    }
+
+    @keyframes beat {
+      0% {
+        transform: scale(1) rotate(-45deg);
+      }
+      50% {
+        transform: scale(1.2) rotate(-45deg);
+      }
+      100% {
+        transform: scale(1) rotate(-45deg);
+      }
+    }
+
+    /* Message */
+    .message h1 {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .message p {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .cta-btn {
+      background-color: #ff6f61;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .cta-btn:hover {
+      background-color: #e55b50;
+      transform: scale(1.05);
+    }
+
+    .full-message {
+      margin-top: 20px;
+    }
+
+    .full-message h2 {
+      font-size: 1.8rem;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .highlight {
+      color: #ff6f61;
+    }
+
+    .response-btn {
+      background-color: #007aff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 1rem;
+      margin: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .response-btn:hover {
+      background-color: #005cbf;
+      transform: scale(1.05);
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+
+<body>
+  <div class="rose-zoom" id="roseZoom"></div>
+
+  <div class="container">
+    <div class="heart-container">
+      <div class="heart"></div>
+      <div class="heart"></div>
+    </div>
+    <div class="message">
+      <h1>💖 Hey Tamanna I Have Something to Ask You 💖</h1>
+      <p>From the moment we met, my life has been so much better. I can't imagine my days without you. So...</p>
+      <button id="revealMessage" class="cta-btn">Reveal My Heartfelt Message</button>
+      <div id="fullMessage" class="full-message hidden">
+        <h2>Will You Be My <span class="highlight">Forever?</span></h2>
+        <button id="yes" onclick="sendEmail('Yes I will')" class="response-btn">Yes! ❤️</button>
+        <button id="no" onclick="sendEmail('Sorry I will not')" class="response-btn">No... 😢</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const revealButton = document.getElementById("revealMessage");
+      const fullMessage = document.getElementById("fullMessage");
+      const roseZoom = document.getElementById("roseZoom");
+
+      revealButton.addEventListener("click", () => {
+        fullMessage.classList.remove("hidden");
+        revealButton.classList.add("hidden");
+
+        // Trigger the rose zoom animation
+        roseZoom.classList.add("active");
+
+        // Remove rose zoom after the animation ends
+        setTimeout(() => {
+          roseZoom.classList.remove("active");
+        }, 3000);
+      });
+    });
+
+    (function () {
+      emailjs.init("PH6AYZ64y0CUQMq7b");
+    })();
+
+    const btnYes = document.getElementById("yes");
+      const btnNo = document.getElementById("no");
+    
+      function removeYesNoBtn(){
+        btnYes.classList.add("hidden");
+        btnNo.classList.add("hidden");
+      }
+
+    function sendEmail(response) {
+        
+      const templateParams = {
+        to_email: 'rakibrayhan8@gmail.com',
+        subject: 'Love proposal',
+        message: response,
+      };
+
+      emailjs.send("service_kra9o71", "template_ap30o89", templateParams)
+        .then((res) => {
+          console.log("SUCCESS!", res.status, res.text);
+        })
+        .catch((err) => {
+          console.error("FAILED...", err);
+        });
+
+        removeYesNoBtn();
+    }
+  </script>
+</body>
+
+</html>
